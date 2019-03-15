@@ -48,7 +48,7 @@ if([int]($FreeSpace/1GB) -gt $Size){
         ForEach ($Link in $Links) {
             $File = Join-Path -Path $Folder -ChildPath $($Link.split("/")[-1])
             if(!(Get-Item -Path $File -ErrorAction SilentlyContinue)){
-                Start-BitsTransfer -Source $Link -Destination $Folder -Description "$File" -DisplayName "$($Selection.Products)"
+                Start-BitsTransfer -Source $Link -Destination $Folder -Description "$File" -DisplayName "$($SC.Products)"
             }
         }
     }
