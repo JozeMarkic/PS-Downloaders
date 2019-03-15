@@ -32,7 +32,15 @@ ForEach ($SC in $Selection) {
 if([int]($FreeSpace/1GB) -gt $Size){
     ForEach ($SC in $Selection) {
         $Folder = New-Item -Path $Down -Name $Selection.Products -ItemType Directory -Force
-        ((Invoke-WebRequest -Uri $SC.URL -UseBasicParsing).links | ? href -match "exe$|docx$|bin$").href | Select-Object -Unique | ForEach-Object -Process { Start-BitsTransfer -Source $_ -Destination $Folder } 
+        $Links = ((Invoke-WebRequest -Uri $SC.URL -UseBasicParsing).links |
+        Where-Object  -Property href -Match  -Value "exe$|docx$|bin$").href |
+        Select-Object -Unique
+        ForEach ($Link in $Links) {
+            $File = Join-Path -Path $Folder -ChildPath $($Link.split("/")[-1])
+            if(!(Get-Item -Path $File -ErrorAction SilentlyContinue)){
+                Start-BitsTransfer -Source $Link -Destination $Folder -Description "$File" -DisplayName "$($Selection.Products)"
+            }
+        }
     }
 } else {
     [int]$Sum = ($Size - $FreeSpace)
