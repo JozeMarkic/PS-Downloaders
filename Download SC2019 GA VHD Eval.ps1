@@ -12,6 +12,16 @@ function Read-FolderBrowserDialog ([string]$Message, [string]$InitialDirectory, 
 
 # Download folder
 $Down = Read-FolderBrowserDialog
+if ($Down.Length -eq 0) {
+    Write-Output -InputObject "No folder selected..."
+    break
+} elseif (-not (Test-Path -Path $Down)) {
+    Write-Output -InputObject "No folder selected..."
+    break
+} else {
+    Write-Output -InputObject "Destination folder selected: $Down"
+    pause
+}
  
 # Get free space on destination volume
 $FreeSpace = (Get-Volume $Down.Split(":")[0]).SizeRemaining
