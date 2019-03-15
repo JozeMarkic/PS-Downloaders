@@ -41,7 +41,7 @@ ForEach ($SC in $Selection) {
 
 if([int]($FreeSpace/1GB) -gt $Size){
     ForEach ($SC in $Selection) {
-        $Folder = New-Item -Path $Down -Name $Selection.Products -ItemType Directory -Force
+        $Folder = New-Item -Path $Down -Name $SC.Products -ItemType Directory -Force
         $Links = ((Invoke-WebRequest -Uri $SC.URL -UseBasicParsing).links |
         Where-Object  -Property href -Match  -Value "exe$|docx$|bin$").href |
         Select-Object -Unique
